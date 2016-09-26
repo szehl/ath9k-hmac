@@ -100,3 +100,6 @@ If the output is something like:
 [    3.648915] ath: TID SLEEPING MODE ENABLED
 ```
 Everything went well.
+
+## HOW TO USE ATH9k HMAC
+

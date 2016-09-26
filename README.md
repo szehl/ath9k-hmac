@@ -102,9 +102,13 @@ If the output is something like:
 Everything went well.
 
 ## HOW TO USE ATH9k HMAC
-First you have to compile the hmac_userspace_daemon
+First you have to compile the hmac_userspace_daemon.
 If you installed the ATH9k HMAC driver with the 3 step manual, you can simply use:
 ```
 cd ~/hmac/ath9k-hmac/hmac_userspace_daemon; make;
 ```
 Otherwise make sure that the file hmac_userspace_daemon/hybrid_tdma_csma_mac.c includes the correct nl80211.h you used during building the ATH9k HTDMA driver.
+We are now able to give the HMAC a first try without the Python wrapper. Just execute the following line in the hmac_userspace_daemon folder (replace wlan0 with your ATH9k WiFi interface, take sure it is up and rfkill is disabled (e.g. sudo rfkill unblock all)):
+```
+sudo ./hmac_userspace_daemon -i wlan0 -f 20000 -n 10 -c 1,b8:a3:86:96:96:8a,1#2,b8:a3:86:96:96:8a,1#3,b8:a3:86:96:96:8a,1#4,b8:a3:86:96:96:8a,1#6,ec:1f:72:82:09:56,1#7,ec:1f:72:82:09:56,1#8,ec:1f:72:82:09:56,1#9,ec:1f:72:82:09:56,1
+```

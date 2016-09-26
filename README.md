@@ -123,5 +123,7 @@ sudo ./hmac_userspace_daemon
 -i wlan0                     # ATH9k WiFi Interface on which HMAC schedule should be applied
 -f 20000                     # Size of each slot in micro seconds
 -n 10                        # Number of Slots
--c                           # Schedule, format: "Slotnumber","MAC Address of Destination","TID Bitmap" 1,b8:a3:86:96:96:8a,1#2,b8:a3:86:96:96:8a,1#3,b8:a3:86:96:96:8a,1#4,b8:a3:86:96:96:8a,1#6,ec:1f:72:82:09:56,1#7,ec:1f:72:82:09:56,1#8,ec:1f:72:82:09:56,1#9,ec:1f:72:82:09:56,1
+-c                           # Schedule, format: "Slotnumber","MAC Address of Destination","TID Bitmap"#
+                             #e.g.:
+1,b8:a3:86:96:96:8a,1#2,b8:a3:86:96:96:8a,1#3,b8:a3:86:96:96:8a,1#4,b8:a3:86:96:96:8a,1#6,ec:1f:72:82:09:56,1#7,ec:1f:72:82:09:56,1#8,ec:1f:72:82:09:56,1#9,ec:1f:72:82:09:56,1
 ```

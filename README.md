@@ -9,16 +9,16 @@
   |                           |                    |
   |                           | ZeroMQ             |
   |                           |                    |
-|                           |                    |
-|           +---------------v--------------------+
-|           |                                    | HMAC User Space Daemon
-|           |   HMAC User-Space Daemon           | schedules Software Queues
-|           |                                    | by sending Netlink Commands
-|           |                                    | to wake/sleep specific TIDs
-+-----------+---------------+--------------------+ of a Link identied through
-                            |                      MAC address
-                            |  Netlink
-                            |
+|                           |                    |  
+|           +---------------v--------------------+  
+|           |                                    | HMAC User Space Daemon  
+|           |   HMAC User-Space Daemon           | schedules Software Queues  
+|           |                                    | by sending Netlink Commands  
+|           |                                    | to wake/sleep specific TIDs  
++-----------+---------------+--------------------+ of a Link identied through  
+                            |                      MAC address  
+                            |  Netlink  
+                            |  
 +-----------+------------------------------------+
 |           |               |                    |
 |  Kernel   |     cfg80211  |                    |

@@ -74,6 +74,77 @@ cd ~/hmac/ath9k-hmac/hmac_userspace_daemon; make;
 Otherwise make sure that the file hmac_userspace_daemon/hybrid_tdma_csma_mac.c includes the correct nl80211.h you used during building the ATH9k HTDMA driver.
 
 
+You can now use the HMAC Python Wrapper to start the ATH9k HMAC.
+
+Make sure, that the ATH9K WiFi interface you want to use is up (e.g. sudo ifconfig wlan0 up), rfkill does not block WiFi (e.g. sudo rfkill unblock all).
+```
+cd ~/hmac/ath9k-hmac/; python hmac_python_wrapper/hmac_python_wrapper.py wlan0
+```
+The Usual Output of the Wrapper should be like this:
+```
+root@earth:~/hmac/ath9k-hmac$ python hmac_python_wrapper/hmac_python_wrapper.py wlan0
+Function: installMacProcessor
+Calling hybrid mac executable w/ = hmac_userspace_daemon/hmac_userspace_daemon -d 0  -iwlan0 -f20000 -n10 -c1,34:13:e8:24:77:be,1#2,34:13:e8:24:77:be,1#3,34:13:e8:24:77:be,1#4,34:13:e8:24:77:be,1
+[0: 
+1: 34:13:e8:24:77:be/1,
+2: 34:13:e8:24:77:be/1,
+3: 34:13:e8:24:77:be/1,
+4: 34:13:e8:24:77:be/1,
+5: 
+6: 
+7: 
+8: 
+9: 
+]
+
+Debug = 0
+Interface = wlan0
+Slot Duration = 20000
+Total number of slots in frame = 10
+Config = 1,34:13:e8:24:77:be,1#2,34:13:e8:24:77:be,1#3,34:13:e8:24:77:be,1#4,34:13:e8:24:77:be,1Using init schedule w/:
+#0: , #1: 34:13:e8:24:77:be,1, #2: 34:13:e8:24:77:be,1, #3: 34:13:e8:24:77:be,1, #4: 34:13:e8:24:77:be,1, #5: , #6: , #7: , #8: , #9: , nl80211 init called v2
+Worker routine started ... ready to receive new configuration messages via ZMQ socket.
+
+Updating Hybrid MAC:
+Function: updateMacProcessor
+Received new configuration update: 5,34:13:e8:24:77:be,1#6,34:13:e8:24:77:be,1#7,34:13:e8:24:77:be,1#8,34:13:e8:24:77:be,1
+Received reply from HMAC: OK
+[0: 
+1: 
+2: 
+3: 
+4: 
+5: 34:13:e8:24:77:be/1,
+6: 34:13:e8:24:77:be/1,
+7: 34:13:e8:24:77:be/1,
+8: 34:13:e8:24:77:be/1,
+9: 
+]
+Average slot duration: 20004.86
+
+Stopping Hybrid MAC:
+Function: uninstallMacProcessor
+Received new configuration update: 0,FF:FF:FF:FF:FF:FF,255#1,FF:FF:FF:FF:FF:FF,255#2,FF:FF:FF:FF:FF:FF,255#3,FF:FF:FF:FF:FF:FF,255#4,FF:FF:FF:FF:FF:FF,255#5,FF:FF:FF:FF:FF:FF,255#6,FF:FF:FF:FF:FF:FF,255#7,FF:FF:FF:FF:FF:FF,255#8,FF:FF:FF:FF:FF:FF,255#9,FF:FF:FF:FF:FF:FF,255
+Received reply from HMAC: OK
+Received new configuration update: TERMINATE
+Received reply from HMAC:  OK
+[0: 
+1: 
+2: 
+3: 
+4: 
+5: 34:13:e8:24:77:be/1,
+6: 34:13:e8:24:77:be/1,
+7: 34:13:e8:24:77:be/1,
+8: 34:13:e8:24:77:be/1,
+9: 
+]
+Terminating ...
+
+```
+
+
+
 #ATH9k Advanced Configuration
 
 ## How to install HMAC on other Linux distributions and Kernels:

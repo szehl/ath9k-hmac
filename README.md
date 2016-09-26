@@ -1,14 +1,14 @@
 # ATH9K HTDMA Hybrid TDMA/CSMA MAC 
 
-+-----------+------------------------------------+
-|           |                                    | Python HMAC Wrapper enables
-|  User     |   HMAC Python Wrapper              | easy integration in python scripts
-|  Space    |                                    | starts / stops / updates HMAC
-|           |                                    | user-space daemon and schedule
-|           +---------------+--------------------+ via ZMQ IPC
-|                           |                    |
-|                           | ZeroMQ             |
-|                           |                    |
+  +-----------+------------------------------------+
+  |           |                                    | Python HMAC Wrapper enables
+  |  User     |   HMAC Python Wrapper              | easy integration in python scripts
+  |  Space    |                                    | starts / stops / updates HMAC
+  |           |                                    | user-space daemon and schedule
+  |           +---------------+--------------------+ via ZMQ IPC
+  |                           |                    |
+  |                           | ZeroMQ             |
+  |                           |                    |
 |                           |                    |
 |           +---------------v--------------------+
 |           |                                    | HMAC User Space Daemon

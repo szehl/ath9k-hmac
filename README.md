@@ -1,5 +1,41 @@
 # ATH9K HTDMA Hybrid TDMA/CSMA MAC 
 
++-----------+------------------------------------+
+|           |                                    | Python HMAC Wrapper enables
+|  User     |   HMAC Python Wrapper              | easy integration in python scripts
+|  Space    |                                    | starts / stops / updates HMAC
+|           |                                    | user-space daemon and schedule
+|           +---------------+--------------------+ via ZMQ IPC
+|                           |                    |
+|                           | ZeroMQ             |
+|                           |                    |
+|                           |                    |
+|           +---------------v--------------------+
+|           |                                    | HMAC User Space Daemon
+|           |   HMAC User-Space Daemon           | schedules Software Queues
+|           |                                    | by sending Netlink Commands
+|           |                                    | to wake/sleep specific TIDs
++-----------+---------------+--------------------+ of a Link identied through
+                            |                      MAC address
+                            |  Netlink
+                            |
++-----------+------------------------------------+
+|           |               |                    |
+|  Kernel   |     cfg80211  |                    |
+|  Space    |               |                    |
+|           |               |                    |
+|           +------------------------------------+
+|           |               |                    |
+|           |               |                    |
+|           |     mac80211  |                    |
+|           |               |                    |
+|           +------------------------------------+
+|           |               | MAC ao:f1:...      | ATH9k Traffic Identifier
+|           |               +--+--+--+--+        | Software Queues
+|           |     ath9k     |  |  |  |  |...     | HMAC pauses/unpauses Queues
+|           |               |0 |1 |2 |3 |        | 7 Queues (TIDs per Link)
++-----------+---------------------------+--------+
+
 
 
 ## HOW TO INSTALL ATH9K HTDMA on Ubuntu Linux in 3 steps: 

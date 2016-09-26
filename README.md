@@ -1,14 +1,14 @@
 # ATH9K HTDMA Hybrid TDMA/CSMA MAC 
-
-  +-----------+------------------------------------+
-  |           |                                    | Python HMAC Wrapper enables
-  |  User     |   HMAC Python Wrapper              | easy integration in python scripts
-  |  Space    |                                    | starts / stops / updates HMAC
-  |           |                                    | user-space daemon and schedule
-  |           +---------------+--------------------+ via ZMQ IPC
-  |                           |                    |
-  |                           | ZeroMQ             |
-  |                           |                    |
+```
++-----------+------------------------------------+
+|           |                                    | Python HMAC Wrapper enables
+|  User     |   HMAC Python Wrapper              | easy integration in python scripts
+|  Space    |                                    | starts / stops / updates HMAC
+|           |                                    | user-space daemon and schedule
+|           +---------------+--------------------+ via ZMQ IPC
+|                           |                    |
+|                           | ZeroMQ             |
+|                           |                    |
 |                           |                    |  
 |           +---------------v--------------------+  
 |           |                                    | HMAC User Space Daemon  
@@ -35,7 +35,7 @@
 |           |     ath9k     |  |  |  |  |...     | HMAC pauses/unpauses Queues
 |           |               |0 |1 |2 |3 |        | 7 Queues (TIDs per Link)
 +-----------+---------------------------+--------+
-
+```
 
 
 ## HOW TO INSTALL ATH9K HTDMA on Ubuntu Linux in 3 steps: 

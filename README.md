@@ -125,5 +125,6 @@ sudo ./hmac_userspace_daemon
 -n 10                        # Number of Slots
 -c                           # Schedule, format: "Slotnumber","MAC Address of Destination","TID Bitmap"#
                              #e.g.:
-1,b8:a3:86:96:96:8a,1#2,b8:a3:86:96:96:8a,1#3,b8:a3:86:96:96:8a,1#4,b8:a3:86:96:96:8a,1#6,ec:1f:72:82:09:56,1#7,ec:1f:72:82:09:56,1#8,ec:1f:72:82:09:56,1#9,ec:1f:72:82:09:56,1
+1,b8:a3:86:96:96:8a,1#2,ec:1f:72:82:09:56,1#3,b8:a3:86:96:96:8a,1#4,b8:a3:86:96:96:8a,1#6,ec:1f:72:82:09:56,1#7,ec:1f:72:82:09:56,1#8,ec:1f:72:82:09:56,1#9,ec:1f:72:82:09:56,1
 ```
+The example uses the following configuration: Interface: wlan0, Size of each Slot: 20ms, Number of Slots: 10 (SuperSlot = 200ms), Scheduler Konfiguration: first slot, Link with STA b8:a3:86:96:96:8a, TID MAP: 0b0000001 means TID 1 (Best Effort), '#' is used as seperator, second slot: Link with STA ec:1f:72:82:09:56, TID TID MAP: 0b0000001 means TID 1 (Best Effort), ... etc.

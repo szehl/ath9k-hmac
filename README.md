@@ -27,7 +27,7 @@ If the output is something like:
 ```
 Everything went well.
 
-## How to install HMAC on other Linux distributions:
+## How to install HMAC on other Linux distributions and Kernels:
 
 Go to  https://www.kernel.org/pub/linux/kernel/projects/backports/stable
 and look for the backports version that fits for your kernel, download and unpack  it.
@@ -42,13 +42,23 @@ tar -xzf backports-3.12.8-1.tar.gz
 Download ATH9k-HMAC Patch for your kernel (hopefully we have the correct one for you, otherwise you have to adjust the patch on your own or switch to another kernel), apply patch to your backports source.
 ```
 cd /tmp/
-git clone XXXXX
+https://github.com/szehl/ath9k-hmac.git
 cd backports/backports-3.12.8-1/
-patch -t -p3 < ../../XXXXX/patch-hmac.patch
+patch -t -p3 < ../../patch/ath9k-hmac/ath9k-hmac-backports-3.12.8-1.patch
 ```
 Build and install the ATH9k-HMAC driver.
 ```
 cd /tmp/backports/backports-3.12.8-1/
 make defconfig-ath9k
 make -j4
+sudo make install
 ```
+After Reboot the ATH9k-HMAC should be installed, you can check by typing
+```
+dmesg | grep TID
+```
+If the output is something like:
+```
+[    3.648915] ath: TID SLEEPING MODE ENABLED
+```
+Everything went well.

@@ -15,8 +15,6 @@
  * TID_SLEEPING PATCH 2015 Sven Zehl zehl@tkn.tu-berlin.de
  */
 
-#define TID_SLEEPING
-
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 #include <linux/kernel.h>
@@ -571,8 +569,8 @@ static int __ath_regd_init(struct ath_regulatory *reg)
 		       "country code should be used\n");
 		reg->country_code = CTRY_UNITED_STATES;
 	}
-#ifdef TID_SLEEPING	               
-		printk("ath: TID SLEEPING MODE ENABLED\n");
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	               
+		printk("ath: ATH9K HMAC ENABLED\n");
 #endif  
 	if (reg->country_code == CTRY_DEFAULT) {
 		country = NULL;

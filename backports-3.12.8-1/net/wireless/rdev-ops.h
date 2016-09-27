@@ -1,8 +1,6 @@
 #ifndef __CFG80211_RDEV_OPS
 #define __CFG80211_RDEV_OPS
 
-#define TID_SLEEPING
-
 #include <linux/rtnetlink.h>
 #include <net/cfg80211.h>
 #include "core.h"
@@ -200,7 +198,7 @@ static inline int rdev_change_station(struct cfg80211_registered_device *rdev,
 	return ret;
 }
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 static inline int rdev_tid_sleeping(struct cfg80211_registered_device *rdev,
 				      struct net_device *dev,  char * tid_sleep_data_ptr, u8 tid_sleep_data_len)
 {

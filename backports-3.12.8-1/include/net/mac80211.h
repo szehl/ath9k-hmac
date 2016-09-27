@@ -22,8 +22,6 @@
 #include <net/cfg80211.h>
 #include <asm/unaligned.h>
 
-#define TID_SLEEPING
-
 /**
  * DOC: Introduction
  *
@@ -2870,7 +2868,7 @@ struct ieee80211_ops {
 	void (*channel_switch_beacon)(struct ieee80211_hw *hw,
 				      struct ieee80211_vif *vif,
 				      struct cfg80211_chan_def *chandef);
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
     int (*set_tid_sleep_mode)(char * tid_sleep_data_ptr, 
         u8 tid_sleep_data_len);
 #endif	                      

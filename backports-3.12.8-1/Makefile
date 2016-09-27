@@ -8,8 +8,6 @@ MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 BACKPORT_PWD := $(shell pwd)
 
-CFLAGS += -DTID_SLEEPING
-
 KMODDIR ?= updates
 ifneq ($(origin KLIB), undefined)
 KMODPATH_ARG := "INSTALL_MOD_PATH=$(KLIB)"

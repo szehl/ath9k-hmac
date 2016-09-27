@@ -23,7 +23,6 @@
 #include <linux/net.h>
 #include <net/regulatory.h>
 
-#define TID_SLEEPING
 
 /**
  * DOC: Introduction
@@ -2410,7 +2409,7 @@ struct cfg80211_ops {
 	int	(*channel_switch)(struct wiphy *wiphy,
 				  struct net_device *dev,
 				  struct cfg80211_csa_settings *params);
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
     int	(*tid_sleeping)(struct wiphy *wiphy, struct net_device *dev,
 			     char * tid_sleep_data_ptr, u8 tid_sleep_data_len);
 #endif                  

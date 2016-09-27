@@ -19,8 +19,6 @@
 #include "ath9k.h"
 #include "ar9003_mac.h"
 
-#define TID_SLEEPING
-//#define TID_SLEEPING_DEBUG
 
 #define BITS_PER_BYTE           8
 #define OFDM_PLCP_BITS          22
@@ -1458,7 +1456,7 @@ void ath_tx_aggr_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 	bool buffered;
 	int tidno;
     
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 	struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n, *sta_found;
     sta_found = 0;
     sta_n = 0;
@@ -1467,7 +1465,7 @@ void ath_tx_aggr_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 	list_for_each_entry_safe(sta_pos, sta_n, 
         &tid_sleep_sta_sleep_ctl_list, list) 
 	{
-#ifdef TID_SLEEPING_DEBUG   
+#ifdef CPTCFG_ATH_DEBUG   
         printk("ath_tx_aggr_sleep: MAC searched: %pM \n", sta->addr);
         printk("ath_tx_aggr_sleep: MAC saved: %pM \n", sta_pos->sta->addr);
 #endif
@@ -1483,7 +1481,7 @@ void ath_tx_aggr_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 	for (tidno = 0, tid = &an->tid[tidno];
 	     tidno < IEEE80211_NUM_TIDS; tidno++, tid++) {
              
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 		if(sta_found)
 		{
             if(sta_found->sleeping_tids[tidno]==false)
@@ -1491,7 +1489,7 @@ void ath_tx_aggr_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 				/*Do not put a TID of a STA that is in global sleep mode 
                 into sleep mode if the TID of the STA has set 
                 sleep mode set to false*/
-#ifdef TID_SLEEPING_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                   
                 printk("ath_tx_aggr_sleep: Do no sleeo break!");
 #endif                
 				continue;
@@ -1523,7 +1521,7 @@ void ath_tx_aggr_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 	}
 }
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 void ath_tx_aggr_sleep_tid_sleep(struct ieee80211_sta *sta, 
     struct ath_softc *sc, struct ath_node *an)
 {
@@ -1540,7 +1538,7 @@ void ath_tx_aggr_sleep_tid_sleep(struct ieee80211_sta *sta,
 	list_for_each_entry_safe(sta_pos, sta_n, 
         &tid_sleep_sta_sleep_ctl_list, list) 
 	{
-#ifdef TID_SLEEPING_DEBUG           
+#ifdef CPTCFG_ATH_DEBUG           
         printk("ath_tx_aggr_sleep_tid_sleep: MAC searched: %pM \n", 
             sta->addr);
         printk("ath_tx_aggr_sleep_tid_sleep: MAC saved: %pM \n", 
@@ -1599,7 +1597,7 @@ void ath_tx_aggr_wakeup(struct ath_softc *sc, struct ath_node *an)
 	struct ath_txq *txq;
 	int tidno;
     
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 	struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n, *sta_found;
     sta_found = 0;
     sta_n = 0;
@@ -1608,7 +1606,7 @@ void ath_tx_aggr_wakeup(struct ath_softc *sc, struct ath_node *an)
 	list_for_each_entry_safe(sta_pos, sta_n, 
         &tid_sleep_sta_sleep_ctl_list, list) 
 	{
-#ifdef TID_SLEEPING_DEBUG           
+#ifdef CPTCFG_ATH_DEBUG           
         printk("ath_tx_aggr_wakeup: MAC search: %pM \n", 
             an->sta->addr);
         printk("ath_tx_aggr_wakeup: MAC saved: %pM \n", 
@@ -1625,13 +1623,13 @@ void ath_tx_aggr_wakeup(struct ath_softc *sc, struct ath_node *an)
 	for (tidno = 0, tid = &an->tid[tidno];
 	     tidno < IEEE80211_NUM_TIDS; tidno++, tid++) {
 
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 		if(sta_found)
 		{
 			if(sta_found->sleeping_tids[tidno]==true)
 			{
 				continue;
-#ifdef TID_SLEEPING_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                   
                 printk("ath_tx_aggr_wakeup: Do no wake up, break!");
 #endif                
 			}
@@ -2326,7 +2324,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 	int q;
 	int ret;
     
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 	struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n, *sta_found;
     bool tid_sleep_tid_force_sleep=false;
     sta_found = 0;
@@ -2366,12 +2364,12 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 
 		if (info->flags & IEEE80211_TX_CTL_CLEAR_PS_FILT)
 			tid->ac->clear_ps_filter = true;
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
         if(txctl->an)
         {
             if(txctl->an->sta)
             {	
-#ifdef TID_SLEEPING_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                   
                 printk("ath_tx_start: MAC search: %pM \n", 
                     txctl->an->sta->addr);
 #endif                
@@ -2381,14 +2379,14 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
                 {
                     if(sta_pos->sta == txctl->an->sta) 
                     {
-#ifdef TID_SLEEPING_DEBUG                           
+#ifdef CPTCFG_ATH_DEBUG                           
                         printk("ath_tx_start: MAC saved: %pM \n", 
                             sta_pos->sta->addr);
 #endif                        
                         sta_found=sta_pos;
                         if(tid)
                         {
-#ifdef TID_SLEEPING_DEBUG                               
+#ifdef CPTCFG_ATH_DEBUG                               
                             printk("ath_tx_start:STA found 1");
 #endif                            
                             tid_sleep_tid_force_sleep=sta_found->
@@ -2400,7 +2398,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
             }
             else if(txctl->sta)
             {
-#ifdef TID_SLEEPING_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                   
                  printk("ath_tx_start: MAC search: %pM \n", 
                     txctl->sta->addr);
 #endif                 
@@ -2408,7 +2406,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
                 list_for_each_entry_safe(sta_pos, sta_n, 
                     &tid_sleep_sta_sleep_ctl_list, list) 
                 {
-#ifdef TID_SLEEPING_DEBUG                       
+#ifdef CPTCFG_ATH_DEBUG                       
                     printk("ath_tx_start: MAC saved: %pM \n", 
                         sta_pos->sta->addr);
 #endif                    
@@ -2417,7 +2415,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
                         sta_found=sta_pos;
                         if(tid)
                         {
-#ifdef TID_SLEEPING_DEBUG                               
+#ifdef CPTCFG_ATH_DEBUG                               
                             printk("ath_tx_start: STA found 2");
 #endif                            
                             tid_sleep_tid_force_sleep=sta_found->
@@ -2438,12 +2436,12 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 		 */
 		TX_STAT_INC(txq->axq_qnum, a_queued_sw);
 		__skb_queue_tail(&tid->buf_q, skb);
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 		if (!txctl->an->sleeping && tid_sleep_tid_force_sleep==false) {
 #else
 		if (!txctl->an->sleeping) {
 #endif        
-#ifdef TID_SLEEPING_DEBUG   
+#ifdef CPTCFG_ATH_DEBUG   
             printk("ath_tx_start: This frame will be sent\n");
 #endif            
 			ath_tx_queue_tid(txq, tid);

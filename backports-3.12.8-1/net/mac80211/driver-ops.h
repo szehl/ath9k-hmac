@@ -9,8 +9,6 @@
 #include "ieee80211_i.h"
 #include "trace.h"
 
-#define TID_SLEEPING
-
 static inline void check_sdata_in_driver(struct ieee80211_sub_if_data *sdata)
 {
 	WARN(!(sdata->flags & IEEE80211_SDATA_IN_DRIVER),

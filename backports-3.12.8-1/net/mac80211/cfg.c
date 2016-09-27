@@ -21,8 +21,6 @@
 #include "rate.h"
 #include "mesh.h"
 
-#define TID_SLEEPING
-
 static struct wireless_dev *ieee80211_add_iface(struct wiphy *wiphy,
 						const char *name,
 						enum nl80211_iftype type,
@@ -1458,7 +1456,7 @@ static int ieee80211_del_station(struct wiphy *wiphy, struct net_device *dev,
 	return 0;
 }
 
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 static int ieee80211_tid_sleeping(struct wiphy *wiphy,
 				    struct net_device *dev, char * tid_sleep_data_ptr, 
                         u8 tid_sleep_data_len)
@@ -3701,7 +3699,7 @@ struct cfg80211_ops mac80211_config_ops = {
 	.get_channel = ieee80211_cfg_get_channel,
 	.start_radar_detection = ieee80211_start_radar_detection,
 	.channel_switch = ieee80211_channel_switch,
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
     .tid_sleeping = ieee80211_tid_sleeping,
 #endif        
 };

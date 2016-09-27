@@ -132,3 +132,11 @@ config ATH9K_HTC_DEBUGFS
 	depends on ATH9K_HTC && DEBUG_FS
 	---help---
 	  Say Y, if you need access to ath9k_htc's statistics.
+	  
+config ATH9K_TID_SLEEPING
+	bool "Atheros ath9k TID sleeping support"
+	depends on ATH9K
+	default n
+	---help---
+		Say Y to have ath9k TID sleeping support.
+ 

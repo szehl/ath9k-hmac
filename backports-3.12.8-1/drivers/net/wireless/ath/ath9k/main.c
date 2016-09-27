@@ -20,10 +20,8 @@
 #include "ath9k.h"
 #include "btcoex.h"
 
-#define TID_SLEEPING
-//#define TID_SLEEPING_DEBUG
 
-#ifdef TID_SLEEPING				
+#ifdef CPTCFG_ATH9K_TID_SLEEPING				
 struct list_head tid_sleep_sta_sleep_ctl_list;  	
 
 struct tid_sleep_tuple
@@ -675,7 +673,7 @@ static int ath9k_start(struct ieee80211_hw *hw)
 
 	ath9k_ps_restore(sc);
     
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 	INIT_LIST_HEAD(&tid_sleep_sta_sleep_ctl_list);
 #endif
 
@@ -1352,7 +1350,7 @@ static int ath9k_sta_add(struct ieee80211_hw *hw,
 	struct ieee80211_key_conf ps_key = { };
 	int key;
     
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 	int iter_sleep_sta;
 	struct tid_sleep_sta_sleep_ctl * new_sleep_sta;
 	new_sleep_sta = kmalloc(sizeof(struct tid_sleep_sta_sleep_ctl), GFP_USER);
@@ -1399,7 +1397,7 @@ static int ath9k_sta_remove(struct ieee80211_hw *hw,
 			    struct ieee80211_sta *sta)
 {
     
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 	struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n;
 #endif	
     
@@ -1408,7 +1406,7 @@ static int ath9k_sta_remove(struct ieee80211_hw *hw,
 	ath9k_del_ps_key(sc, vif, sta);
 	ath_node_detach(sc, sta);
     
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
 	list_for_each_entry_safe(sta_pos, sta_n, 
         &tid_sleep_sta_sleep_ctl_list, list) 
 	{
@@ -2031,7 +2029,7 @@ static int ath9k_get_antenna(struct ieee80211_hw *hw, u32 *tx_ant, u32 *rx_ant)
 	return 0;
 }
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 
 static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr, 
                         u8 tid_sleep_data_len)
@@ -2045,14 +2043,14 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
     if(tid_sleep_data_len % sizeof(struct tid_sleep_tuple) == 0)
     {
         num_entries = tid_sleep_data_len / sizeof(struct tid_sleep_tuple);
-#ifdef TID_SLEEPING_DEBUG       
+#ifdef CPTCFG_ATH_DEBUG       
         printk("ATH9k:num_entries: %d, tid_sleep_data_len: %d, sizeof one:%lu\n",
             num_entries,tid_sleep_data_len,sizeof(struct tid_sleep_tuple));
 #endif            
         for(j=0; j<num_entries; j++)
         {
             /*Print current entry*/
-#ifdef TID_SLEEPING_DEBUG               
+#ifdef CPTCFG_ATH_DEBUG               
             printk("*****\nEntry No: %d\nMAC: %pM \n",j,
                 tids_tuple_ptr->mac);
             printk("TID wakeup mask: %d\n", tids_tuple_ptr->mask);
@@ -2085,7 +2083,7 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
             }
             if(ff_cntr==6)
             {
-#ifdef TID_SLEEPING_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                   
                 printk("Process all STAs activated\n");
 #endif                
             }           
@@ -2102,7 +2100,7 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
                                         sta_pos->sta->addr[5]==tids_tuple_ptr->mac[5]) ||
                                             (ff_cntr==6)) 
                     {
-#ifdef TID_SLEEPING_DEBUG                           
+#ifdef CPTCFG_ATH_DEBUG                           
                         printk("STA MAC: %pM found\n",sta_pos->sta->addr);
 #endif                        
                         for(tid_no=0; tid_no<8; tid_no++)
@@ -2110,14 +2108,14 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
                             if(wakeup_tids[tid_no]) 
                             {
                                 sta_pos->sleeping_tids[tid_no]=false;
-#ifdef TID_SLEEPING_DEBUG                                   
+#ifdef CPTCFG_ATH_DEBUG                                   
                                 printk("Wakeup TID: %d\n",tid_no);
 #endif                                
                             }
                             else
                             {
                                 sta_pos->sleeping_tids[tid_no]=true;
-#ifdef TID_SLEEPING_DEBUG                                   
+#ifdef CPTCFG_ATH_DEBUG                                   
                                 printk("Sleeping TID: %d\n",tid_no);
 #endif                                
                             }
@@ -2135,7 +2133,7 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
         }
         if(num_entries==0) /*Allow nothing, set everything to sleep*/
         {
-#ifdef TID_SLEEPING_DEBUG               
+#ifdef CPTCFG_ATH_DEBUG               
             printk("Global Sleep Mode Activated!\n");
             printk("Putting all STAs and all their TIDs into sleep mode\n");
 #endif            
@@ -2144,7 +2142,7 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
                 for(tid_no=0; tid_no<8; tid_no++)
                 {    
                     sta_pos->sleeping_tids[tid_no]=true;
-#ifdef TID_SLEEPING_DEBUG                       
+#ifdef CPTCFG_ATH_DEBUG                       
                     printk("Sleeping TID: %d\n",tid_no);
 #endif                    
                 }
@@ -2563,7 +2561,7 @@ struct ieee80211_ops ath9k_ops = {
 	.sw_scan_start	    = ath9k_sw_scan_start,
 	.sw_scan_complete   = ath9k_sw_scan_complete,
 	.channel_switch_beacon     = ath9k_channel_switch_beacon,
-#ifdef TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
     .set_tid_sleep_mode = ath9k_tid_sleep_mode,
 #endif   
 };

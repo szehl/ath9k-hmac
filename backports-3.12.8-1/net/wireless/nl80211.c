@@ -26,8 +26,6 @@
 #include "reg.h"
 #include "rdev-ops.h"
 
-#define TID_SLEEPING
-
 static int nl80211_crypto_settings(struct cfg80211_registered_device *rdev,
 				   struct genl_info *info,
 				   struct cfg80211_crypto_settings *settings,
@@ -3945,15 +3943,15 @@ static int nl80211_tid_sleeping(struct sk_buff *skb, struct genl_info *info)
     
     tid_sleep_data_len = 0;
     tid_sleep_data_ptr = 0;
-	if (info->attrs[NL80211_ATTR_TID_SLEEP_CTRL_DATA]) {
+	if (info->attrs[NL80211_ATTR_TID_SLEEP]) {
 		tid_sleep_data_ptr =
-			nla_data(info->attrs[NL80211_ATTR_TID_SLEEP_CTRL_DATA]);
+			nla_data(info->attrs[NL80211_ATTR_TID_SLEEP]);
 		tid_sleep_data_len =
-			nla_len(info->attrs[NL80211_ATTR_TID_SLEEP_CTRL_DATA]);
+			nla_len(info->attrs[NL80211_ATTR_TID_SLEEP]);
 	}
     else
     {
-        printk("No data supplied for NL80211_ATTR_TID_SLEEP_CTRL\n");
+        printk("No data supplied for NL80211_ATTR_TID_SLEEP\n");
     }
 
 	switch (dev->ieee80211_ptr->iftype) {
@@ -9573,7 +9571,7 @@ static struct genl_ops nl80211_ops[] = {
 	},
 #ifdef TID_SLEEPING   
     {
-		.cmd = NL80211_ATTR_TID_SLEEP_CTRL,
+		.cmd = NL80211_CMD_TID_SLEEP,
 		.doit = nl80211_tid_sleeping,
         .dumpit = nl80211_dump_tid_sleeping,
 		.policy = nl80211_policy,

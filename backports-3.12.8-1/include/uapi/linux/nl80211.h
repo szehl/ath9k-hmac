@@ -28,7 +28,6 @@
 #include <linux/types.h>
 
 #define NL80211_GENL_NAME "nl80211"
-#define TID_SLEEPING
 
 /**
  * DOC: Station handling
@@ -686,6 +685,10 @@
  *	width). %NL80211_ATTR_CH_SWITCH_BLOCK_TX may be supplied to inform
  *	other station that transmission must be blocked until the channel
  *	switch is complete.
+ * 
+ * @NL80211_CMD_SET_TID_SLEEP: set the power save mode of a single TID
+ *  of a distinct STA.
+ *
  *
  * @NL80211_CMD_MAX: highest used command number
  * @__NL80211_CMD_AFTER_LAST: internal use
@@ -855,7 +858,9 @@ enum nl80211_commands {
 	NL80211_CMD_CHANNEL_SWITCH,
 
 	/* add new commands above here */
-
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
+	NL80211_CMD_SET_TID_SLEEP,
+#endif
 	/* used to define NL80211_CMD_MAX below */
 	__NL80211_CMD_AFTER_LAST,
 	NL80211_CMD_MAX = __NL80211_CMD_AFTER_LAST - 1
@@ -1497,8 +1502,8 @@ enum nl80211_commands {
  * @NL80211_ATTR_RXMGMT_FLAGS: flags for nl80211_send_mgmt(), u32.
  *	As specified in the &enum nl80211_rxmgmt_flags.
  *
- * @NL80211_ATTR_TID_SLEEP_CTRL: change the power save mode of a single TID
- *  of a distinct STA. (TID_SLEEPING)
+ * @NL80211_ATTR_TID_SLEEP: payload for changing the power save mode of 
+ *  a single TID of a distinct STA. (TID_SLEEPING)
  * 
  * @NL80211_ATTR_MAX: highest attribute number currently defined
  * @__NL80211_ATTR_AFTER_LAST: internal use
@@ -1812,9 +1817,8 @@ enum nl80211_attrs {
 
 	/* add attributes here, update the policy in nl80211.c */
     
-#ifdef TID_SLEEPING	   
-    NL80211_ATTR_TID_SLEEP_CTRL,
-    NL80211_ATTR_TID_SLEEP_CTRL_DATA,
+#ifdef CPTCFG_ATH9K_TID_SLEEPING   
+    NL80211_ATTR_TID_SLEEP,
 #endif
 
 	__NL80211_ATTR_AFTER_LAST,

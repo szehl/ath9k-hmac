@@ -29,7 +29,6 @@
 #include "mci.h"
 #include "dfs.h"
 
-#define TID_SLEEPING
 
 /*
  * Header for the ath9k.ko driver core *only* -- hw code nor any other driver
@@ -38,7 +37,7 @@
 
 struct ath_node;
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 extern struct list_head tid_sleep_sta_sleep_ctl_list; 
 void ath_tx_aggr_sleep_tid_sleep(struct ieee80211_sta *sta, struct ath_softc *sc,
 		       struct ath_node *an);
@@ -199,7 +198,7 @@ struct ath_txq {
 };
 
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 struct tid_sleep_sta_sleep_ctl {
     struct list_head list;
 	struct ieee80211_hw *hw;

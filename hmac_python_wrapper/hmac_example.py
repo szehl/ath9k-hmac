@@ -25,14 +25,13 @@ if __name__ == "__main__":
         - B. time slots 5-8 can be used by any best effort traffic towards STA with MAC address 34:13:e8:24:77:be
         - B. the other time slots are guard time slots, i.e. blocked from being used
     '''
-
     log = logging.getLogger()
+    log.setLevel(logging.INFO)
     handler = logging.StreamHandler()
     handler.setLevel(logging.INFO)
     formatter = logging.Formatter("%(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     log.addHandler(handler)
-
 
     # configuration of hybrid MAC
     dstHWAddr = "34:13:e8:24:77:be" # STA destination MAC address
@@ -61,10 +60,10 @@ if __name__ == "__main__":
     # install MAC Processor
     if mac.install_mac_processor():
         log.info('HMAC is running ...')
-        log.info('HMAC conf: %s' % mac.printConfiguration())
+        mac.printConfiguration()
 
-        # wait 10 seconds
-        time.sleep(10)
+        # wait 20 seconds
+        time.sleep(20)
 
         log.info('Update HMAC with new configuration ...')
 
@@ -86,9 +85,9 @@ if __name__ == "__main__":
         # update MAC Processor
         if mac.update_mac_processor():
             log.info('HMAC is updated ...')
-            log.info('HMAC new conf: %s' % mac.printConfiguration())
+            mac.printConfiguration()
 
-            time.sleep(10)
+            time.sleep(20)
 
             log.info("Stopping HMAC")
 

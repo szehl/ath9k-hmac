@@ -105,11 +105,11 @@ class HybridTDMACSMAMac(object):
         Return the MAC configuration serialized as string.
         :return:
         '''
-        s = '['
+        self.log.info('[')
         for ii in range(self.getNumSlots()):
-            s = s + str(ii) + ': ' + self.getAccessPolicy(ii).printConfiguration() + "\n"
-        s = s + ']'
-        return s
+            nline = str(ii) + ': ' + self.getAccessPolicy(ii).printConfiguration()
+            self.log.info(nline)
+        self.log.info(']')
 
 
     def install_mac_processor(self):

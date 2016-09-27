@@ -92,20 +92,20 @@ cd ~/hmac/ath9k-hmac/; python hmac_python_wrapper/hmac_example.py
 ```
 The Usual Output of the Wrapper should be like this:
 ```
-root@earth:~/hmac/ath9k-hmac$ python hmac_python_wrapper/hmac_python_wrapper.py wlan0
-Function: installMacProcessor
-Calling hybrid mac executable w/ = hmac_userspace_daemon/hmac_userspace_daemon -d 0  -iwlan0 -f20000 -n10 -c1,34:13:e8:24:77:be,1#2,34:13:e8:24:77:be,1#3,34:13:e8:24:77:be,1#4,34:13:e8:24:77:be,1
-[0: 
-1: 34:13:e8:24:77:be/1,
-2: 34:13:e8:24:77:be/1,
-3: 34:13:e8:24:77:be/1,
-4: 34:13:e8:24:77:be/1,
-5: 
-6: 
-7: 
-8: 
-9: 
-]
+root@earth:~/hmac/ath9k-hmac$ python hmac_python_wrapper/hmac_example.py
+INFO - HMAC is running ...
+INFO - [
+INFO - 0: 
+INFO - 1: 34:13:e8:24:77:be/1,
+INFO - 2: 34:13:e8:24:77:be/1,
+INFO - 3: 34:13:e8:24:77:be/1,
+INFO - 4: 34:13:e8:24:77:be/1,
+INFO - 5: 
+INFO - 6: 
+INFO - 7: 
+INFO - 8: 
+INFO - 9: 
+INFO - ]
 
 Debug = 0
 Interface = wlan0
@@ -114,45 +114,39 @@ Total number of slots in frame = 10
 Config = 1,34:13:e8:24:77:be,1#2,34:13:e8:24:77:be,1#3,34:13:e8:24:77:be,1#4,34:13:e8:24:77:be,1Using init schedule w/:
 #0: , #1: 34:13:e8:24:77:be,1, #2: 34:13:e8:24:77:be,1, #3: 34:13:e8:24:77:be,1, #4: 34:13:e8:24:77:be,1, #5: , #6: , #7: , #8: , #9: , nl80211 init called v2
 Worker routine started ... ready to receive new configuration messages via ZMQ socket.
-
-Updating Hybrid MAC:
-Function: updateMacProcessor
+INFO - Update HMAC with new configuration ...
+INFO - Send ctrl req message to HMAC: 5,34:13:e8:24:77:be,1#6,34:13:e8:24:77:be,1#7,34:13:e8:24:77:be,1#8,34:13:e8:24:77:be,1
 Received new configuration update: 5,34:13:e8:24:77:be,1#6,34:13:e8:24:77:be,1#7,34:13:e8:24:77:be,1#8,34:13:e8:24:77:be,1
-Received reply from HMAC: OK
-[0: 
-1: 
-2: 
-3: 
-4: 
-5: 34:13:e8:24:77:be/1,
-6: 34:13:e8:24:77:be/1,
-7: 34:13:e8:24:77:be/1,
-8: 34:13:e8:24:77:be/1,
-9: 
-]
-Average slot duration: 20004.86
-
-Stopping Hybrid MAC:
-Function: uninstallMacProcessor
+INFO - Received ctrl reply message from HMAC: OK
+INFO - HMAC is updated ...
+INFO - [
+INFO - 0: 
+INFO - 1: 
+INFO - 2: 
+INFO - 3: 
+INFO - 4: 
+INFO - 5: 34:13:e8:24:77:be/1,
+INFO - 6: 34:13:e8:24:77:be/1,
+INFO - 7: 34:13:e8:24:77:be/1,
+INFO - 8: 34:13:e8:24:77:be/1,
+INFO - 9: 
+INFO - ]
+Average slot duration: 19992.50
+INFO - Stopping HMAC
+INFO - Send ctrl req message to HMAC: 0,FF:FF:FF:FF:FF:FF,255#1,FF:FF:FF:FF:FF:FF,255#2,FF:FF:FF:FF:FF:FF,255#3,FF:FF:FF:FF:FF:FF,255#4,FF:FF:FF:FF:FF:FF,255#5,FF:FF:FF:FF:FF:FF,255#6,FF:FF:FF:FF:FF:FF,255#7,FF:FF:FF:FF:FF:FF,255#8,FF:FF:FF:FF:FF:FF,255#9,FF:FF:FF:FF:FF:FF,255
 Received new configuration update: 0,FF:FF:FF:FF:FF:FF,255#1,FF:FF:FF:FF:FF:FF,255#2,FF:FF:FF:FF:FF:FF,255#3,FF:FF:FF:FF:FF:FF,255#4,FF:FF:FF:FF:FF:FF,255#5,FF:FF:FF:FF:FF:FF,255#6,FF:FF:FF:FF:FF:FF,255#7,FF:FF:FF:FF:FF:FF,255#8,FF:FF:FF:FF:FF:FF,255#9,FF:FF:FF:FF:FF:FF,255
-Received reply from HMAC: OK
+INFO - Received ctrl reply from HMAC: OK
 Received new configuration update: TERMINATE
-Received reply from HMAC:  OK
-[0: 
-1: 
-2: 
-3: 
-4: 
-5: 34:13:e8:24:77:be/1,
-6: 34:13:e8:24:77:be/1,
-7: 34:13:e8:24:77:be/1,
-8: 34:13:e8:24:77:be/1,
-9: 
-]
+INFO - Received ctrl reply from HMAC: OK
+INFO - HMAC is stopped ...
 Terminating ...
-
 ```
 
+In the example, first the ATH9K HTDMA MAC is started with a initial configuration with 10 slots in which the slots 1-4 are only enabled for traffic which is destined to STA 34:13:e8:24:77:be, the TID MAP with 1 maps to 0b00000001 which means TID 1 is enabled, which means in turn best effort traffic is enabled all other TIDs are paused. The slots 0 and 5-9 are paused for all traffic.
+
+In the second step of the example, the update functionality is called and the schedule is changed, now the slots 5-8 are used by Best Effort traffic which is destined to STA 34:13:e8:24:77:be, while the slots 0-4 and 9 are paused for everyone.
+
+Finally in the last step of the example, the terminate functionality is called which first enables all TIDs of all STAs and second terminates the user-space daemon and therefore deactivates the ATH9k HTDMA. 
 
 
 #ATH9k Advanced Configuration

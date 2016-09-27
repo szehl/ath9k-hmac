@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+# -*-coding: utf-8 -*-
 import logging
 import time
+
 
 from hmac_python_wrapper import HybridTDMACSMAMac, AccessPolicy
 
@@ -22,7 +25,14 @@ if __name__ == "__main__":
         - B. time slots 5-8 can be used by any best effort traffic towards STA with MAC address 34:13:e8:24:77:be
         - B. the other time slots are guard time slots, i.e. blocked from being used
     '''
-    log = logging.getLogger("HMAC.Example")
+
+    log = logging.getLogger()
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+
 
     # configuration of hybrid MAC
     dstHWAddr = "34:13:e8:24:77:be" # STA destination MAC address
@@ -31,7 +41,7 @@ if __name__ == "__main__":
     iface = 'wlan0'
 
     # create new MAC for local node
-    mac = HybridTDMACSMAMac(no_slots_in_superframe=total_slots, slot_duration_ns=slot_duration)
+    mac = HybridTDMACSMAMac(log, iface, total_slots, slot_duration)
 
     be_slots = [1,2,3,4]
 

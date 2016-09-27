@@ -39,8 +39,10 @@
 #include <netlink/attr.h>
 #include <netlink/socket.h>
 #include <stdlib.h>
+#define CPTCFG_ATH9K_TID_SLEEPING
 #include "../backports-3.12.8-1/include/uapi/linux/nl80211.h"
 #include "iw.h"
+//nclude "../backports-3.12.8-1/include/uapi/linux/nl80211.h"
 #include <pthread.h>
 #include <unistd.h>
 #include <cassert>
@@ -50,6 +52,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+
 
 // struct to be passed via netlink to ath9k driver
 struct tid_sleep_tuple
@@ -235,8 +238,9 @@ static int send_nl_msg(std::string& schedule)
 		goto out_free_msg;
 	}
 
+
 	// create NetLink message
-	genlmsg_put(msg, 0, 0, state.nl80211_id, 0, 0, NL80211_CMD_TID_SLEEP, 0);
+	genlmsg_put(msg, 0, 0, state.nl80211_id, 0, 0, NL80211_CMD_SET_TID_SLEEP, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, devidx);
 
 	// update tids_tuple with current slot schedule

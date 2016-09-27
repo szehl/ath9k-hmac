@@ -7,7 +7,7 @@
 #include <netlink/genl/family.h>
 #include <netlink/genl/ctrl.h>
 #include <endian.h>
-
+#include "../backports-3.12.8-1/include/uapi/linux/nl80211.h"
 #include "ieee80211.h"
 
 #define ETH_ALEN 6

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*-coding: utf-8 -*-
+
 import logging
 import time
 import subprocess
@@ -12,7 +15,7 @@ __email__ = "{zehl, zubow}@tkn.tu-berlin.de"
 Class for controlling the hybrid TDMA/CSMA MAC.
 """
 class HybridTDMACSMAMac(object):
-    def __init__(self, interface, no_slots_in_superframe, slot_duration_ns,
+    def __init__(self, log, interface, no_slots_in_superframe, slot_duration_ns,
                  hmac_binary_path='hmac_userspace_daemon/hmac_userspace_daemon',
                  local_mac_processor_port=1217):
         '''
@@ -23,8 +26,7 @@ class HybridTDMACSMAMac(object):
         :param hmac_binary_path: path to the C++ userland HMAC daemon
         :param local_mac_processor_port: ZeroMQ port used for communication with HMAC daemon
         '''
-        self.log = logging.getLogger("{module}.{name}".format(
-            module=self.__class__.__module__, name=self.__class__.__name__))
+        self.log = log
 
         self.interface = interface
         self.mNo_slots_in_superframe = no_slots_in_superframe
@@ -126,7 +128,7 @@ class HybridTDMACSMAMac(object):
             conf_str = self._create_configuration_string()
 
             # construct command argument for HMAC daemon
-            processArgs = str(self.exec_file) + " -d 0 " + " -i" + str(self.interface) \
+            processArgs = str(self.hmac_binary_path) + " -d 0 " + " -i" + str(self.interface) \
                           + " -f" + str(self.getSlotDuration()) + " -n" + str(self.getNumSlots()) + " -c" + conf_str
 
             self.log.debug('Starting HMAC daemon with: %s' % processArgs)

@@ -1818,7 +1818,7 @@ enum nl80211_attrs {
 	/* add attributes here, update the policy in nl80211.c */
     
 #ifdef CPTCFG_ATH9K_TID_SLEEPING   
-    NL80211_ATTR_TID_SLEEP,
+    	NL80211_ATTR_TID_SLEEP,
 #endif
 
 	__NL80211_ATTR_AFTER_LAST,

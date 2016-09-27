@@ -9569,9 +9569,9 @@ static struct genl_ops nl80211_ops[] = {
 		.internal_flags = NL80211_FLAG_NEED_NETDEV_UP |
 				  NL80211_FLAG_NEED_RTNL,
 	},
-#ifdef NL80211_CMD_SET_TID_SLEEP   
+#ifdef CPTCFG_ATH9K_TID_SLEEPING   
     {
-		.cmd = NL80211_CMD_TID_SLEEP,
+		.cmd = NL80211_CMD_SET_TID_SLEEP,
 		.doit = nl80211_tid_sleeping,
         .dumpit = nl80211_dump_tid_sleeping,
 		.policy = nl80211_policy,

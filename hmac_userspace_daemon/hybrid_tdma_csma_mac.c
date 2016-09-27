@@ -236,7 +236,7 @@ static int send_nl_msg(std::string& schedule)
 	}
 
 	// create NetLink message
-	genlmsg_put(msg, 0, 0, state.nl80211_id, 0, 0, NL80211_ATTR_TID_SLEEP_CTRL, 0);
+	genlmsg_put(msg, 0, 0, state.nl80211_id, 0, 0, NL80211_CMD_TID_SLEEP, 0);
 	NLA_PUT_U32(msg, NL80211_ATTR_IFINDEX, devidx);
 
 	// update tids_tuple with current slot schedule
@@ -253,7 +253,7 @@ static int send_nl_msg(std::string& schedule)
         tids_tuple[k].mask = tid_mask;
 	}
 
-    NLA_PUT(msg, NL80211_ATTR_TID_SLEEP_CTRL_DATA, sizeof(struct tid_sleep_tuple)*tuples.size(), (const void *) &tids_tuple[0]);
+    NLA_PUT(msg, NL80211_ATTR_TID_SLEEP, sizeof(struct tid_sleep_tuple)*tuples.size(), (const void *) &tids_tuple[0]);
 	nl_socket_set_cb(state.nl_sock, s_cb);
 
 	// send message

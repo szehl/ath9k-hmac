@@ -3916,7 +3916,7 @@ static int nl80211_set_station_tdls(struct genl_info *info,
 }
 
 
-#ifdef TID_SLEEPING	
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
 
 static int nl80211_dump_tid_sleeping(struct sk_buff *skb,
 				struct netlink_callback *cb)
@@ -9569,7 +9569,7 @@ static struct genl_ops nl80211_ops[] = {
 		.internal_flags = NL80211_FLAG_NEED_NETDEV_UP |
 				  NL80211_FLAG_NEED_RTNL,
 	},
-#ifdef TID_SLEEPING   
+#ifdef CPTCFG_ATH9K_TID_SLEEPING   
     {
 		.cmd = NL80211_CMD_TID_SLEEP,
 		.doit = nl80211_tid_sleeping,

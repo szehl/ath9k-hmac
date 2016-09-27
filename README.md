@@ -76,9 +76,19 @@ Otherwise make sure that the file hmac_userspace_daemon/hybrid_tdma_csma_mac.c i
 
 You can now use the HMAC Python Wrapper to start the ATH9k HMAC.
 
-Make sure, that the ATH9K WiFi interface you want to use is up (e.g. sudo ifconfig wlan0 up), rfkill does not block WiFi (e.g. sudo rfkill unblock all).
+To start a first example of the ATH9K HTDMA MAC, please make sure, that the ATH9K WiFi interface you want to use is up (e.g. 
+sudo ifconfig wlan0 up), rfkill does not block WiFi (e.g. sudo rfkill unblock all). Then open the file hmac_python_wrapper/hmac_example.py and configure your interface and targte Link address e.g.:
+
 ```
-cd ~/hmac/ath9k-hmac/; python hmac_python_wrapper/hmac_python_wrapper.py wlan0
+    # configuration of hybrid MAC example
+    dstHWAddr = "34:13:e8:24:77:be" # STA destination MAC address
+    total_slots = 10
+    slot_duration = 20000
+    iface = 'wlan0'
+```
+Afterwards you can start the example by typing:
+```
+cd ~/hmac/ath9k-hmac/; python hmac_python_wrapper/hmac_example.py
 ```
 The Usual Output of the Wrapper should be like this:
 ```

@@ -5,7 +5,7 @@
 |  User     |   HMAC Python Wrapper              | easy integration in python scripts
 |  Space    |                                    | starts / stops / updates HMAC
 |           |                                    | user-space daemon and schedule
-|           +---------------+--------------------+ via ZMQ IPC
+|           +---------------^--------------------+ via ZMQ IPC
 |                           |                    |
 |                           | ZeroMQ             |
 |                           |                    |

@@ -57,11 +57,11 @@ cd ~/hmac/ath9k-hmac/backports-3.12.8-1; make defconfig-ath9k; make -j4; sudo ma
 Now again reboot your machine and choose 3.12 kernel during boot in the grub menu.
 After Reboot the ATH9k-HMAC should be installed, you can check by typing
 ```
-dmesg | grep TID
+dmesg | grep HMAC
 ```
 If the output is something like:
 ```
-[    3.648915] ath: TID SLEEPING MODE ENABLED
+[    3.711813] ath: ATH9K HMAC ENABLED
 ```
 Everything went well.
 
@@ -175,11 +175,11 @@ sudo make install
 ```
 After Reboot the ATH9k-HMAC should be installed, you can check by typing
 ```
-dmesg | grep TID
+dmesg | grep HMAC
 ```
 If the output is something like:
 ```
-[    3.648915] ath: TID SLEEPING MODE ENABLED
+[    3.711813] ath: ATH9K HMAC ENABLED
 ```
 Everything went well.
 

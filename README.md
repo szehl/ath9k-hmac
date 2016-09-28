@@ -54,7 +54,7 @@ Now reboot machine and choose 3.12 kernel during boot in the grub menu.
 ```
 cd ~/hmac/ath9k-hmac/backports-3.12.8-1; make defconfig-ath9k; make -j4; sudo make install
 ```
-Now again reboot your machine and choose 3.12 kernel during boot in the grub menu.
+Now again reboot your machine and **choose 3.12 kernel** during boot in the grub menu.
 After Reboot the ATH9k-HMAC should be installed, you can check by typing
 ```
 dmesg | grep HMAC

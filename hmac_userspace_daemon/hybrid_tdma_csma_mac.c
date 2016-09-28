@@ -235,7 +235,8 @@ static int send_nl_msg(std::string& schedule)
 	if (!cb || !s_cb) {
 		fprintf(stderr, "failed to allocate netlink callbacks\n");
 		err = 2;
-		goto out_free_msg;
+		nlmsg_free(msg);
+		return err;
 	}
 
 
@@ -263,7 +264,11 @@ static int send_nl_msg(std::string& schedule)
 	// send message
 	err = nl_send_auto_complete(state.nl_sock, msg);
 	if (err < 0)
-		goto out;
+	{
+		nl_cb_put(cb);
+		nlmsg_free(msg);
+		return err;
+	}
 
 	err = 1;
 
@@ -303,14 +308,16 @@ static int nl80211_init(struct nl80211_state *state)
 	if (genl_connect(state->nl_sock)) {
 		fprintf(stderr, "Failed to connect to generic netlink.\n");
 		err = -ENOLINK;
-		goto out_handle_destroy;
+		nl_socket_free(state->nl_sock);
+		return err;
 	}
 
 	state->nl80211_id = genl_ctrl_resolve(state->nl_sock, "nl80211");
 	if (state->nl80211_id < 0) {
 		fprintf(stderr, "nl80211 not found.\n");
 		err = -ENOENT;
-		goto out_handle_destroy;
+		nl_socket_free(state->nl_sock);
+		return err;
 	}
 
 	return 0;

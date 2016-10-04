@@ -763,7 +763,11 @@ static u32 ath_lookup_rate(struct ath_softc *sc, struct ath_buf *bf,
 			modeidx++;
 
 		frmlen = sc->tx.max_aggr_framelen[q][modeidx][rates[i].idx];
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
+		max_4ms_framelen = min(max_4ms_framelen/4, frmlen);
+#else		
 		max_4ms_framelen = min(max_4ms_framelen, frmlen);
+#endif
 	}
 
 	/*
@@ -2056,12 +2060,18 @@ static void ath_tx_txqaddbuf(struct ath_softc *sc, struct ath_txq *txq,
 	struct ath_buf *bf, *bf_last;
 	bool puttxbuf = false;
 	bool edma;
+#ifdef CPTCFG_ATH_DEBUG 
+    struct timespec ts_start;
+#endif          
 
 	/*
 	 * Insert the frame on the outbound list and
 	 * pass it on to the hardware.
 	 */
-
+#ifdef CPTCFG_ATH_DEBUG
+    getnstimeofday(&ts_start);
+    printk("HMAC: ath_tx_txqaddbub called, put txdescriptor list to hardware, qnum: %d, txq depth: %d, time: %lu.%lu\n", txq->axq_qnum, txq->axq_depth, ts_start.tv_sec, ts_start.tv_nsec);
+#endif  
 	if (list_empty(head))
 		return;
 

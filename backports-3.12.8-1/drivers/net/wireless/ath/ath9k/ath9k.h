@@ -125,7 +125,13 @@ int ath_descdma_setup(struct ath_softc *sc, struct ath_descdma *dd,
 #define ATH_RXBUF               512
 #define ATH_TXBUF               512
 #define ATH_TXBUF_RESERVE       5
+
+#ifdef CPTCFG_ATH9K_TID_SLEEPING
+#define ATH_MAX_QDEPTH          (ATH_TXBUF / 13 - ATH_TXBUF_RESERVE)
+#else
 #define ATH_MAX_QDEPTH          (ATH_TXBUF / 4 - ATH_TXBUF_RESERVE)
+#endif
+
 #define ATH_TXMAXTRY            13
 
 #define TID_TO_WME_AC(_tid)				\
@@ -659,7 +665,13 @@ void ath_ant_comb_scan(struct ath_softc *sc, struct ath_rx_status *rs);
 #define DEFAULT_CACHELINE       32
 #define ATH_REGCLASSIDS_MAX     10
 #define ATH_CABQ_READY_TIME     80      /* % of beacon interval */
+
+#ifdef CPTCFG_ATH9K_TID_SLEEPING	
+#define ATH_MAX_SW_RETRIES      50
+#else
 #define ATH_MAX_SW_RETRIES      30
+#endif
+
 #define ATH_CHAN_MAX            255
 
 #define ATH_TXPOWER_MAX         100     /* .5 dBm units */

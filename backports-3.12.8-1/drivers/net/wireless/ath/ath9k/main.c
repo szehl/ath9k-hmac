@@ -20,7 +20,6 @@
 #include "ath9k.h"
 #include "btcoex.h"
 
-
 #ifdef CPTCFG_ATH9K_TID_SLEEPING				
 struct list_head tid_sleep_sta_sleep_ctl_list;  	
 
@@ -2039,7 +2038,14 @@ static int ath9k_tid_sleep_mode(char * tid_sleep_data_ptr,
     u8 wakeup_tids[8];
     struct tid_sleep_tuple *tids_tuple_ptr;
     struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n;
+#ifdef CPTCFG_ATH_DEBUG 
+    struct timespec ts_start;
+#endif        
     tids_tuple_ptr = (struct tid_sleep_tuple *) tid_sleep_data_ptr;
+#ifdef CPTCFG_ATH_DEBUG
+    getnstimeofday(&ts_start);
+    printk("HMAC CALLED AT: %lu.%lu\n", ts_start.tv_sec, ts_start.tv_nsec);
+#endif    
     if(tid_sleep_data_len % sizeof(struct tid_sleep_tuple) == 0)
     {
         num_entries = tid_sleep_data_len / sizeof(struct tid_sleep_tuple);

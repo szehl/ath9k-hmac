@@ -18,6 +18,7 @@
 #include "hw-ops.h"
 #include <linux/export.h>
 
+
 static void ath9k_hw_set_txq_interrupts(struct ath_hw *ah,
 					struct ath9k_tx_queue_info *qi)
 {
@@ -51,12 +52,24 @@ EXPORT_SYMBOL(ath9k_hw_gettxbuf);
 
 void ath9k_hw_puttxbuf(struct ath_hw *ah, u32 q, u32 txdp)
 {
+#ifdef CPTCFG_ATH_DEBUG
+	struct timespec ts_start;
+    getnstimeofday(&ts_start);
+    printk("HMAC: ath9k_hw_puttxbuf() called,  put txdescriptor list to hardware, qnum: %d, time: %lu.%lu\n", q, ts_start.tv_sec, ts_start.tv_nsec);
+    printk("HMAC: ath9k_hw_puttxbuf(), caller is %pS\n", __builtin_return_address(0));
+#endif 	
 	REG_WRITE(ah, AR_QTXDP(q), txdp);
 }
 EXPORT_SYMBOL(ath9k_hw_puttxbuf);
 
 void ath9k_hw_txstart(struct ath_hw *ah, u32 q)
 {
+#ifdef CPTCFG_ATH_DEBUG
+	struct timespec ts_start;
+    getnstimeofday(&ts_start);
+    printk("HMAC: ath9k_hw_txstart() called, Enable TXE on queue: %u, time: %lu.%lu\n", q, ts_start.tv_sec, ts_start.tv_nsec);
+    printk("HMAC: ath9k_hw_txstart(), caller is %pS\n", __builtin_return_address(0));
+#endif 
 	ath_dbg(ath9k_hw_common(ah), QUEUE, "Enable TXE on queue: %u\n", q);
 	REG_WRITE(ah, AR_Q_TXE, 1 << q);
 }

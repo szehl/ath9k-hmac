@@ -1,4 +1,4 @@
-# ATH9K HTDMA Hybrid TDMA/CSMA MAC 
+# ATH9K HMAC Hybrid TDMA/CSMA MAC 
 ```
 +-----------+------------------------------------+
 |           |                                    | Python HMAC Wrapper enables
@@ -38,7 +38,7 @@
 ```
 
 
-## HOW TO INSTALL ATH9K HTDMA on Ubuntu Linux in 3 steps: 
+## HOW TO INSTALL ATH9K HMAC on Ubuntu Linux in 3 steps: 
 ### Download HMAC sources:
 ```
 cd ~; mkdir hmac; cd hmac; git clone https://github.com/szehl/ath9k-hmac.git; 
@@ -71,12 +71,12 @@ If you installed the ATH9k HMAC driver with the 3 step manual, you can simply us
 ```
 cd ~/hmac/ath9k-hmac/hmac_userspace_daemon; make;
 ```
-Otherwise make sure that the file hmac_userspace_daemon/hybrid_tdma_csma_mac.c includes the correct nl80211.h you used during building the ATH9k HTDMA driver.
+Otherwise make sure that the file hmac_userspace_daemon/hybrid_tdma_csma_mac.c includes the correct nl80211.h you used during building the ATH9k HMAC driver.
 
 
 You can now use the HMAC Python Wrapper to start the ATH9k HMAC.
 
-To start a first example of the ATH9K HTDMA MAC, please make sure, that the ATH9K WiFi interface you want to use is up (e.g. 
+To start a first example of the ATH9K HMAC MAC, please make sure, that the ATH9K WiFi interface you want to use is up (e.g. 
 sudo ifconfig wlan0 up), rfkill does not block WiFi (e.g. sudo rfkill unblock all). Then open the file hmac_python_wrapper/hmac_example.py and configure your interface and targte Link address e.g.:
 
 ```
@@ -142,11 +142,11 @@ INFO - HMAC is stopped ...
 Terminating ...
 ```
 
-In the example, first the ATH9K HTDMA MAC is started with a initial configuration with 10 slots in which the slots 1-4 are only enabled for traffic which is destined to STA 34:13:e8:24:77:be, the TID MAP with 1 maps to 0b00000001 which means TID 1 is enabled, which means in turn best effort traffic is enabled all other TIDs are paused. The slots 0 and 5-9 are paused for all traffic.
+In the example, first the ATH9K HMAC is started with a initial configuration with 10 slots in which the slots 1-4 are only enabled for traffic which is destined to STA 34:13:e8:24:77:be, the TID MAP with 1 maps to 0b00000001 which means TID 1 is enabled, which means in turn best effort traffic is enabled all other TIDs are paused. The slots 0 and 5-9 are paused for all traffic.
 
 In the second step of the example, the update functionality is called and the schedule is changed, now the slots 5-8 are used by Best Effort traffic which is destined to STA 34:13:e8:24:77:be, while the slots 0-4 and 9 are paused for everyone.
 
-Finally in the last step of the example, the terminate functionality is called which first enables all TIDs of all STAs and second terminates the user-space daemon and therefore deactivates the ATH9k HTDMA. 
+Finally in the last step of the example, the terminate functionality is called which first enables all TIDs of all STAs and second terminates the user-space daemon and therefore deactivates the ATH9k HMAC. 
 
 
 #ATH9k Advanced Configuration
@@ -209,3 +209,24 @@ sudo ./hmac_userspace_daemon
 The example uses the following configuration: Interface: wlan0, Size of each Slot: 20ms, Number of Slots: 10 (SuperSlot = 200ms), Scheduler Konfiguration: first slot, Link with STA b8:a3:86:96:96:8a, TID MAP: 0b0000001 means TID 1 (Best Effort), '#' is used as seperator, second slot: Link with STA ec:1f:72:82:09:56, TID TID MAP: 0b0000001 means TID 1 (Best Effort), ... etc.
 
 Note that if the schedule configuration contains no entry for a specific slot, global sleep mode (All ATH9k Software Queues are paused) is activated during this slot.
+
+## 9. Contact
+* Sven Zehl, TU-Berlin, zehl@tkn
+* Anatolij Zubow, TU-Berlin, zubow@tkn
+* Adam Wolisz, TU-Berlin, wolisz@tkn
+* tkn = tkn.tu-berlin.de
+* 
+
+## 10. How to reference hMAC
+Please use the following bibtex :
+
+```
+@techreport{zehl16hmac,
+Title = {{ hMAC: Enabling Hybrid TDMA/CSMA on IEEE 802.11 Hardware} }},
+Author = { Zehl, Sven and Zubow, Anatolij and Wolisz, Adam},
+Year = {2016},
+Number = {TKN-16-004},
+Month = {November},
+Institution = {Telecommunication Networks Group, Technische Universit\"at Berlin}
+}
+```

@@ -36,7 +36,8 @@
 |           |               |0 |1 |2 |3 |        | 7 Queues (TIDs per Link)
 +-----------+---------------------------+--------+
 ```
-
+For more details please refer to our Paper:
+<https://arxiv.org/abs/1611.05376>
 
 ## HOW TO INSTALL ATH9K HMAC on Ubuntu Linux in 3 steps: 
 ### Download HMAC sources:

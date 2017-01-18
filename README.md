@@ -223,7 +223,7 @@ Please use the following bibtex :
 
 ```
 @techreport{zehl16hmac,
-Title = {{ hMAC: Enabling Hybrid TDMA/CSMA on IEEE 802.11 Hardware} }},
+Title = {{ hMAC: Enabling Hybrid TDMA/CSMA on IEEE 802.11 Hardware}},
 Author = { Zehl, Sven and Zubow, Anatolij and Wolisz, Adam},
 Year = {2016},
 Number = {TKN-16-004},

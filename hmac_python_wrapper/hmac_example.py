@@ -34,10 +34,10 @@ if __name__ == "__main__":
     log.addHandler(handler)
 
     # configuration of hybrid MAC
-    dstHWAddr = "34:13:e8:24:77:be" # STA destination MAC address
+    dstHWAddr = "ec:1f:72:82:09:56" # STA destination MAC address
     total_slots = 10
     slot_duration = 20000
-    iface = 'wlan0'
+    iface = 'ap5'
 
     # create new MAC for local node
     mac = HybridTDMACSMAMac(log, iface, total_slots, slot_duration)

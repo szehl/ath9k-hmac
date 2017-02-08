@@ -19,6 +19,7 @@
 #include "ath9k.h"
 #include "ar9003_mac.h"
 
+//#define TID_SLEEP_HARD_SCHEDULE
 
 #define BITS_PER_BYTE           8
 #define OFDM_PLCP_BITS          22
@@ -676,6 +677,12 @@ static void ath_tx_process_buffer(struct ath_softc *sc, struct ath_txq *txq,
 {
 	struct ieee80211_tx_info *info;
 	bool txok, flush;
+#ifdef TID_SLEEP_HARD_SCHEDULE 
+    struct timespec ts_time;  
+    int time_tens_milli;   
+    int time_millis;
+    int time_hundreds_milli;
+#endif	
 
 	txok = !(ts->ts_status & ATH9K_TXERR_MASK);
 	flush = !!(ts->ts_status & ATH9K_TX_FLUSH);
@@ -695,9 +702,20 @@ static void ath_tx_process_buffer(struct ath_softc *sc, struct ath_txq *txq,
 		ath_tx_complete_buf(sc, bf, txq, bf_head, ts, txok);
 	} else
 		ath_tx_complete_aggr(sc, txq, bf, bf_head, ts, txok);
-
-	if (!flush)
+#ifdef TID_SLEEP_HARD_SCHEDULE
+        getnstimeofday(&ts_time);
+        time_tens_milli = ts_time.tv_nsec/10000000;
+	    printk("HMAC: Time now: %lu ns, tens milli: %d, alternater: %d\n", ts_time.tv_nsec, time_tens_milli, (time_tens_milli%2));
+#endif		
+	if (!flush){
+#ifdef TID_SLEEP_HARD_SCHEDULE   
+        if (time_tens_milli%2) {
+			ath_txq_schedule(sc, txq);
+		}
+#else
 		ath_txq_schedule(sc, txq);
+#endif
+	}
 }
 
 static bool ath_lookup_legacy(struct ath_buf *bf)
@@ -763,7 +781,7 @@ static u32 ath_lookup_rate(struct ath_softc *sc, struct ath_buf *bf,
 			modeidx++;
 
 		frmlen = sc->tx.max_aggr_framelen[q][modeidx][rates[i].idx];
-#ifdef CPTCFG_ATH9K_TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING_LLP
 		max_4ms_framelen = min(max_4ms_framelen/4, frmlen);
 #else		
 		max_4ms_framelen = min(max_4ms_framelen, frmlen);
@@ -1358,7 +1376,11 @@ static bool ath_tx_sched_aggr(struct ath_softc *sc, struct ath_txq *txq,
 	struct list_head bf_q;
 	int aggr_len = 0;
 	bool aggr, last = true;
-
+	
+#ifdef CPTCFG_ATH_DEBUG
+    printk("HMAC: ath_tx_sched_aggr(), caller is %pS\n", __builtin_return_address(0));
+#endif 
+	
 	if (!ath_tid_has_buffered(tid))
 		return false;
 
@@ -1983,6 +2005,11 @@ void ath_txq_schedule(struct ath_softc *sc, struct ath_txq *txq)
 	struct ath_atx_ac *ac, *last_ac;
 	struct ath_atx_tid *tid, *last_tid;
 	bool sent = false;
+	
+	
+#ifdef CPTCFG_ATH_DEBUG
+    printk("HMAC: ath_txq_schedule(), caller is %pS\n", __builtin_return_address(0));
+#endif 
 
 	if (test_bit(SC_OP_HW_RESET, &sc->sc_flags) ||
 	    list_empty(&txq->axq_acq))
@@ -2071,6 +2098,7 @@ static void ath_tx_txqaddbuf(struct ath_softc *sc, struct ath_txq *txq,
 #ifdef CPTCFG_ATH_DEBUG
     getnstimeofday(&ts_start);
     printk("HMAC: ath_tx_txqaddbub called, put txdescriptor list to hardware, qnum: %d, txq depth: %d, time: %lu.%lu\n", txq->axq_qnum, txq->axq_depth, ts_start.tv_sec, ts_start.tv_nsec);
+    printk("HMAC: ath_tx_txqaddbuf(), caller is %pS\n", __builtin_return_address(0));
 #endif  
 	if (list_empty(head))
 		return;
@@ -2333,6 +2361,16 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 	struct ath_buf *bf;
 	int q;
 	int ret;
+	
+#ifdef TID_SLEEP_HARD_SCHEDULE
+    int home, guest;
+    struct timespec ts_time;    
+    int time_tens_milli;   
+    int time_millis;
+    int time_hundreds_milli;
+    u8 home_mac[6];
+    u8 guest_mac[6];
+#endif	
     
 #ifdef CPTCFG_ATH9K_TID_SLEEPING
 	struct tid_sleep_sta_sleep_ctl *sta_pos, *sta_n, *sta_found;
@@ -2341,6 +2379,54 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
     sta_n = 0;
     sta_found = 0;	
 #endif	    
+
+#ifdef CPTCFG_ATH_DEBUG   
+	printk("\n****************NEW FRAME ath_tx_start****************\n");    
+#endif	
+
+#ifdef TID_SLEEP_HARD_SCHEDULE
+    home = 0;
+    //00:15:6d:86:0f:18
+    home_mac[0] = 0x00;
+    home_mac[1] = 0x15;
+    home_mac[2] = 0x6d;
+    home_mac[3] = 0x86;
+    home_mac[4] = 0x0f;
+    home_mac[5] = 0x18;
+    
+    guest = 0;
+    //00:15:6d:86:0f:19
+    guest_mac[0] = 0x00;
+    guest_mac[1] = 0x15;
+    guest_mac[2] = 0x6d;
+    guest_mac[3] = 0x86;
+    guest_mac[4] = 0x0f;
+    guest_mac[5] = 0x19;
+    if(vif->addr[0]==home_mac[0] && 
+                        vif->addr[1]==home_mac[1] && 
+                           vif->addr[2]==home_mac[2] && 
+                                vif->addr[3]==home_mac[3] && 
+                                    vif->addr[4]==home_mac[4] && 
+                                        vif->addr[5]==home_mac[5]) 
+    {
+		home = 1;
+		printk("ath_tx_start(): Frame for Home VIF started to send\n");
+	}                                    
+    else if(vif->addr[0]==guest_mac[0] && 
+                        vif->addr[1]==guest_mac[1] && 
+                           vif->addr[2]==guest_mac[2] && 
+                                vif->addr[3]==guest_mac[3] && 
+                                    vif->addr[4]==guest_mac[4] && 
+                                        vif->addr[5]==guest_mac[5])    
+    {
+		guest = 1;
+		printk("ath_tx_start(): Frame for Guest VIF started to send\n");
+	}                                    
+    if(home ==1 && guest == 1)
+    {
+		printk("ath_tx_start(): Something went wrong here.. home and guest VIF identified\n");
+	}                                                                     
+#endif
 
 	ret = ath_tx_prepare(hw, skb, txctl);
 	if (ret)
@@ -2351,7 +2437,10 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 	 * At this point, the vif, hw_key and sta pointers in the tx control
 	 * info are no longer valid (overwritten by the ath_frame_info data.
 	 */
-
+#ifdef CPTCFG_ATH_DEBUG  	 
+    printk("Addr1: %pM, Addr2: %pM, Addr3: %pM\n",hdr->addr1, hdr->addr2, hdr->addr3);
+#endif    
+    
 	q = skb_get_queue_mapping(skb);
 
 	ath_txq_lock(sc, txq);
@@ -2360,6 +2449,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 	    !txq->stopped) {
 		ieee80211_stop_queue(sc->hw, q);
 		txq->stopped = true;
+		printk("TXQ STOPPED!!!! at ath_tx_start(): Maybe increase the buffer???? search for ATH_MAX_QDEPTH\n");
 	}
 
 	if (info->flags & IEEE80211_TX_CTL_PS_RESPONSE) {
@@ -2379,7 +2469,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
         {
             if(txctl->an->sta)
             {	
-#ifdef CPTCFG_ATH_DEBUG                   
+#ifdef CPTCFG_ATH_DEBUG                
                 printk("ath_tx_start: MAC search: %pM \n", 
                     txctl->an->sta->addr);
 #endif                
@@ -2446,17 +2536,34 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 		 */
 		TX_STAT_INC(txq->axq_qnum, a_queued_sw);
 		__skb_queue_tail(&tid->buf_q, skb);
+#ifdef TID_SLEEP_HARD_SCHEDULE
+        getnstimeofday(&ts_time);
+        time_hundreds_milli = ts_time.tv_nsec/100000000;
+        time_tens_milli = ts_time.tv_nsec/10000000;
+        time_millis = ts_time.tv_nsec/1000000;
+		printk("HMAC: Time now: %lu ns, tens milli: %d, alternater: %d\n", ts_time.tv_nsec, time_tens_milli, (time_tens_milli%2));
+		//printk("HMAC: Time now: %lu ns, milli: %d, alternater: %d\n", ts_time.tv_nsec, time_millis, (time_millis%2));
+		//printk("HMAC: Time now: %lu ns, hundreds milli: %d, alternater: %d\n", ts_time.tv_nsec, time_hundreds_milli, (time_hundreds_milli%2));
+#endif		
+		
+
 #ifdef CPTCFG_ATH9K_TID_SLEEPING
 		if (!txctl->an->sleeping && tid_sleep_tid_force_sleep==false) {
 #else
-		if (!txctl->an->sleeping) {
-#endif        
+		if (!txctl->an->sleeping) {   
+#endif
 #ifdef CPTCFG_ATH_DEBUG   
             printk("ath_tx_start: This frame will be sent\n");
 #endif            
 			ath_tx_queue_tid(txq, tid);
         }
+#ifdef TID_SLEEP_HARD_SCHEDULE   
+        if ((home == 1 && (time_tens_milli%2) && guest == 0) || (home == 0 && !(time_tens_milli%2) && guest == 1)) {
+			ath_txq_schedule(sc, txq);
+		}
+#else
 		ath_txq_schedule(sc, txq);
+#endif		
 		goto out;
 	}
 

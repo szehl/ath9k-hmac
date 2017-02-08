@@ -593,13 +593,13 @@ minstrel_calc_retransmit(struct minstrel_priv *mp, struct minstrel_ht_sta *mi,
 		/* Total TX time after this try */
 		tx_time += ctime + overhead + tx_time_data;
 		tx_time_rtscts += ctime + overhead_rtscts + tx_time_data;
-#ifdef CPTCFG_ATH9K_TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING_LLP
 		if (tx_time_rtscts < mp->segment_size/6)
 #else
 		if (tx_time_rtscts < mp->segment_size)
 #endif		
 			mr->retry_count_rtscts++;
-#ifdef CPTCFG_ATH9K_TID_SLEEPING
+#ifdef CPTCFG_ATH9K_TID_SLEEPING_LLP
 	} while ((tx_time < mp->segment_size/6) &&
 #else			
 	} while ((tx_time < mp->segment_size) &&

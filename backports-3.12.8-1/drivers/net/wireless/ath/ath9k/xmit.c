@@ -762,12 +762,8 @@ static u32 ath_lookup_rate(struct ath_softc *sc, struct ath_buf *bf,
 		if (rates[i].flags & IEEE80211_TX_RC_SHORT_GI)
 			modeidx++;
 
-		frmlen = sc->tx.max_aggr_framelen[q][modeidx][rates[i].idx];
-#ifdef CPTCFG_ATH9K_TID_SLEEPING
-		max_4ms_framelen = min(max_4ms_framelen/4, frmlen);
-#else		
+		frmlen = sc->tx.max_aggr_framelen[q][modeidx][rates[i].idx];		
 		max_4ms_framelen = min(max_4ms_framelen, frmlen);
-#endif
 	}
 
 	/*
@@ -2360,6 +2356,7 @@ int ath_tx_start(struct ieee80211_hw *hw, struct sk_buff *skb,
 	    !txq->stopped) {
 		ieee80211_stop_queue(sc->hw, q);
 		txq->stopped = true;
+		printk("TXQ STOPPED!!!! at ath_tx_start(): Maybe increase the buffer???? search for ATH_MAX_QDEPTH\n");
 	}
 
 	if (info->flags & IEEE80211_TX_CTL_PS_RESPONSE) {

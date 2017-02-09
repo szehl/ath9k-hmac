@@ -46,7 +46,7 @@ cd ~; mkdir hmac; cd hmac; git clone https://github.com/szehl/ath9k-hmac.git;
 ```
 ### Install 3.12 kernel:
 ```
-chmod +x ath9k-hmac/install_3.12_kernel.sh; ath9k-hmac/install_3.12_kernel.sh
+chmod +x ath9k-hmac/install_3.12_kernel.sh; ath9k-hmac/install_3.12_kernel.sh; sudo update-grub2
 ```
 Now reboot machine and choose 3.12 kernel during boot in the grub menu.
 

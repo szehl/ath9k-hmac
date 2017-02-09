@@ -335,6 +335,7 @@ timeout_cb(evutil_socket_t fd, short event, void *arg)
 	struct timeval newtime, difference;
 	struct event *timeout = (struct event *)arg;
 	long error = 0;
+        int oldFrameNum = 0;
 
 	if (isRunning == 0) {
 		printf("Terminating ...\n");
@@ -384,8 +385,25 @@ timeout_cb(evutil_socket_t fd, short event, void *arg)
 
 		event_add(timeout, &tv);
 		oldtime_l = newtime_l;
-
-		send_nl_msg(schedule_per_slot[relFrameNum]);
+                if(relFrameNum == 0)
+                {
+			oldFrameNum = slotsPerFrame-1;
+                }
+                else
+                { 
+    			oldFrameNum = relFrameNum-1;
+		}
+ 		//printf("#%d: %s, ", relFrameNum, schedule_per_slot[relFrameNum].c_str());
+                //printf("#%d: %s, ", oldFrameNum, schedule_per_slot[oldFrameNum].c_str());
+                if(schedule_per_slot[relFrameNum] != schedule_per_slot[oldFrameNum])
+                {
+                        //std::cout << "Sending_schedule" << std::endl;
+			send_nl_msg(schedule_per_slot[relFrameNum]);
+		}
+ 		else
+		{
+			//std::cout << "Not sending schedule" << std::endl;
+		}
 	}
 }
 

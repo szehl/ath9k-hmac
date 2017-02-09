@@ -36,7 +36,9 @@ if __name__ == "__main__":
     # configuration of hybrid MAC
     dstHWAddr = "34:13:e8:24:77:be" # STA destination MAC address
     total_slots = 10
-    slot_duration = 20000
+    slot_duration = 10000   # depending on slotduration and number of client stas the 
+                            # AP serves you have to update the buffer size using ATH_MAX_QDEPTH in ath9k source
+                            # e.g. increase ATH_TXBUF if more traffic has to be buffered, otherwise ath9k will crash.
     iface = 'wlan0'
 
     # create new MAC for local node
